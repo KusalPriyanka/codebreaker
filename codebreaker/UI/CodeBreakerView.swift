@@ -23,7 +23,7 @@ struct CodeBreakerView: View {
             CodeView(code: game.masterCode)
             
             ScrollView {
-                if !game.isOver || restarting {
+                if !game.isOver {
                     CodeView(code: game.guess, selection: $selection) {
                         Button("Guess", action: guess).flexibleSystemFont()
                     }
@@ -69,11 +69,11 @@ struct CodeBreakerView: View {
     
     func restart() {
         withAnimation(.restart) {
-            restarting = true
+            restarting = game.isOver
+            game.restart()
+            selection = 0
         } completion: {
             withAnimation(.restart) {
-                game.restart()
-                selection = 0
                 restarting = false
             }
         }
