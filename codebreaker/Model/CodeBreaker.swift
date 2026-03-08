@@ -5,19 +5,20 @@
 //  Created by Kusal Perera on 2026-02-23.
 //
 
-import SwiftUI
+import Foundation
+import SwiftData
 
-@Observable class CodeBreaker {
+@Model class CodeBreaker {
     var name: String
-    var masterCode: Code = Code(kind: .master(isHidden: true))
-    var guess: Code = Code(kind: .guess)
-    var attempts: [Code] = []
+    @Relationship(deleteRule: .cascade) var masterCode: Code = Code(kind: .master(isHidden: true))
+    @Relationship(deleteRule: .cascade) var guess: Code = Code(kind: .guess)
+    @Relationship(deleteRule: .cascade) var attempts: [Code] = []
     var pegChoices: [Peg]
-    var startTime: Date?
+    @Transient var startTime: Date?
     var endTime: Date?
     var elapsedTime: TimeInterval = 0
     
-    init(name: String = "Code Breaker", pegChoices: [Peg] = [.red, .blue, .yellow, .green]) {
+    init(name: String = "Code Breaker", pegChoices: [Peg]) {
         self.name = name
         self.pegChoices = pegChoices
         masterCode.randomize(from: pegChoices)
@@ -52,8 +53,11 @@ import SwiftUI
     
     func attemptGuess() {
         guard !attempts.contains(where: { $0.pegs == guess.pegs }) else { return }
-        var attempt = guess
-        attempt.kind = .attemp(guess.match(against: masterCode))
+        let attempt = Code(
+            kind: .attempt(guess.match(against: masterCode)),
+            pegs: guess.pegs
+        )
+        
         attempts.insert(attempt, at: 0)
         guess.reset()
         
@@ -81,17 +85,7 @@ import SwiftUI
 }
 
 extension Peg {
-    static let missing = Color.clear
+    static let missing = ""
 }
 
-extension CodeBreaker : Identifiable, Hashable, Equatable {
-    static func == (lhs: CodeBreaker, rhs: CodeBreaker) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
-
-typealias Peg = Color
+typealias Peg = String

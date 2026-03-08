@@ -5,30 +5,33 @@
 //  Created by Kusal Perera on 2026-02-25.
 //
 
-
 import SwiftUI
+import SwiftData
 
-struct Code {
-    var kind: Kind
-    var pegs: [Peg] = Array(repeating: Peg.missing, count: 4)
+@Model class Code {
+    var _kind: String = Kind.unknown.description
+    var pegs: [Peg]
     
-    static let missingPeg: Peg = .clear
-    
-    enum Kind: Equatable {
-        case master(isHidden: Bool)
-        case guess
-        case attemp([Match])
-        case unknown
+    var kind: Kind {
+        get { return Kind(_kind) }
+        set { _kind = newValue.description }
     }
     
-    mutating func randomize(from pegChoices: [Peg]) {
+    init(kind: Kind, pegs: [Peg] = Array(repeating: Peg.missing, count: 4)) {
+        self.pegs = pegs
+        self.kind = kind
+    }
+    
+    static let missingPeg: Peg = .missing
+    
+    func randomize(from pegChoices: [Peg]) {
         for index in pegs.indices {
             pegs[index] = pegChoices.randomElement() ?? Code.missingPeg
         }
         print(self)
     }
     
-    mutating func reset() {
+    func reset() {
         pegs = Array(repeating: Code.missingPeg, count: 4)
     }
     
@@ -41,7 +44,7 @@ struct Code {
     
     var matches: [Match]? {
         switch kind {
-        case .attemp(let matches): return matches
+        case .attempt(let matches): return matches
         default: return nil
         }
     }
@@ -70,4 +73,10 @@ struct Code {
             }
         }
     }
+}
+
+enum Match: String {
+    case nomatch
+    case exact
+    case inexact
 }
