@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PegChoicesChooser: View {
     //MARK: Data Shared with Me
-    @Binding var pegChoices: [Peg]
+    @Binding var pegChoices: [Color]
     
     //MARK: - Body
     var body: some View {
@@ -51,7 +51,7 @@ struct PegChoicesChooser: View {
 }
 
 #Preview {
-    @Previewable @State var pegChoices: [Peg] = [.green, .yellow, .gray, .blue]
+    @Previewable @State var pegChoices: [Color] = [.green, .yellow, .gray, .blue]
     PegChoicesChooser(pegChoices: $pegChoices)
         .onChange(of: pegChoices) {
             print("pegChoices = \(pegChoices)")
