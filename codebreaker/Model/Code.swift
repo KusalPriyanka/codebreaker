@@ -11,6 +11,7 @@ import SwiftData
 @Model class Code {
     var _kind: String = Kind.unknown.description
     var pegs: [Peg]
+    var timestamp: Date = Date.now
     
     var kind: Kind {
         get { return Kind(_kind) }
