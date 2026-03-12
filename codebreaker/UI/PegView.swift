@@ -12,7 +12,7 @@ struct PegView: View {
     let peg: Peg
     
     // MARK: - Body
-    let pegShape = Circle()
+    let pegShape = Diamond()
     
     var body: some View {
         pegShape

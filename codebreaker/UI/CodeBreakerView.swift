@@ -10,6 +10,7 @@ import SwiftUI
 struct CodeBreakerView: View {
     //MARK: Data In
     @Environment(\.scenePhase) var scenePhase
+    @Environment(\.sceneFrame) var sceneFrame
     
     //MARK: Data Shared with Me
     let game: CodeBreaker
@@ -44,11 +45,15 @@ struct CodeBreakerView: View {
                 }
             }
             
-            if !game.isOver {
-                PegChooser(choices: game.pegChoices, onChoose: changePegAtSelection)
-                    .transition(.pegChooser)
-                    .frame(maxHeight: 90)
+            GeometryReader { geometry in
+                if !game.isOver {
+                    let offset = sceneFrame.maxY - geometry.frame(in: .global).minY
+                    PegChooser(choices: game.pegChoices, onChoose: changePegAtSelection)
+                        .transition(.offset(x: 0, y: offset))
+                }
             }
+            .aspectRatio(CGFloat(game.pegChoices.count), contentMode: .fit)
+            .frame(maxHeight: 90)
         }
         .trackElapsedTime(in: game)
         .toolbar {
