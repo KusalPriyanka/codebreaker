@@ -18,6 +18,12 @@ struct GameList: View {
     
     // MARK: Data Owned by Me
     @State private var gameToEdit: CodeBreaker?
+    @State private var staticSummarySize: GameSummary.Size = .large
+    @State private var dynamicSummarySizeMagnification: CGFloat = 1.0
+    
+    var summarySize: GameSummary.Size {
+        staticSummarySize * dynamicSummarySizeMagnification
+    }
     
     init(sortBy: SortOption = .name, nameContains search: String = "", selection: Binding<CodeBreaker?>) {
         _selection = selection
@@ -56,7 +62,7 @@ struct GameList: View {
         List(selection: $selection) {
             ForEach(games) { game in
                 NavigationLink(value: game) {
-                    GameSummary(game: game)
+                    GameSummary(game: game, size: summarySize)
                 }
                 .contextMenu {
                     editButton(for: game) // Editing a game
@@ -72,6 +78,7 @@ struct GameList: View {
                 }
             }
         }
+        .gesture(summarySizeMagnifier)
         .onChange(of: games) {
             if let selection, !games.contains(selection) {
                 self.selection = nil
@@ -83,6 +90,17 @@ struct GameList: View {
             EditButton() // Editing the list of games
         }
         .onAppear { addSampleGames() }
+    }
+    
+    var summarySizeMagnifier: some Gesture {
+        MagnifyGesture()
+            .onChanged { value in
+                dynamicSummarySizeMagnification = value.magnification
+            }
+            .onEnded { value in
+                staticSummarySize = staticSummarySize * value.magnification
+                dynamicSummarySizeMagnification = 1.0
+            }
     }
     
     var addButton: some View {
@@ -138,6 +156,18 @@ struct GameList: View {
             modelContext.insert(CodeBreaker(name: "Mastermind", pegChoices: [.red, .blue, .green, .yellow]))
             modelContext.insert(CodeBreaker(name: "Earth Tones", pegChoices: [.orange, .brown, .black, .yellow, .green]))
             modelContext.insert(CodeBreaker(name: "Undersea", pegChoices: [.blue, .indigo, .cyan]))
+        }
+    }
+}
+
+extension GameSummary.Size {
+    static func *(lhs: Self, rhs: CGFloat) -> Self {
+        switch rhs {
+        case 2.0...: lhs.larger.larger
+        case 1.5...: lhs.larger
+        case ...0.35: lhs.smaller.smaller
+        case ...0.5: lhs.smaller
+        default: lhs
         }
     }
 }
