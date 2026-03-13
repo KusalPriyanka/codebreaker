@@ -8,12 +8,12 @@
 import Foundation
 import SwiftData
 
-@Model class CodeBreaker {
-    var name: String
+@Model final class CodeBreaker {
+    var name: String = ""
     @Relationship(deleteRule: .cascade) var masterCode: Code = Code(kind: .master(isHidden: true))
     @Relationship(deleteRule: .cascade) var guess: Code = Code(kind: .guess)
-    @Relationship(deleteRule: .cascade) var _attempts: [Code] = []
-    var pegChoices: [Peg]
+    @Relationship(deleteRule: .cascade, inverse: \Code.game) var _attempts: [Code] = []
+    var pegChoices: [Peg] = []
     @Transient var startTime: Date?
     var endTime: Date?
     var elapsedTime: TimeInterval = 0
@@ -24,6 +24,8 @@ import SwiftData
         get { _attempts.sorted { $0.timestamp > $1.timestamp } }
         set { _attempts = newValue }
     }
+    
+    init() { }
     
     init(name: String = "Code Breaker", pegChoices: [Peg]) {
         self.name = name

@@ -55,11 +55,22 @@ struct CodeBreakerView: View {
             .aspectRatio(CGFloat(game.pegChoices.count), contentMode: .fit)
             .frame(maxHeight: 90)
         }
-        .gesture(pegChoosingDial)
+        .highPriorityGesture(pegChoosingDial)
         .trackElapsedTime(in: game)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Restart", systemImage: "arrow.circlepath", action: restart)
+            }
+            ToolbarItem {
+                Button("Save", systemImage: "square.and.arrow.down") {
+                    if let json = try? JSONEncoder().encode(game) {
+                        let url = URL.documentsDirectory
+                            .appendingPathComponent(game.name)
+                            .appendingPathExtension("json")
+                        
+                        try? json.write(to: url)
+                    }
+                }
             }
             ToolbarItem {
                 ElapsedTime(startTime: game.startTime, endTime: game.endTime, elapsedTime: game.elapsedTime)
