@@ -18,3 +18,20 @@ CodeBreaker is an iOS app I built from scratch as part of my learning journey th
 | Game List | Game Play | Game Editor |
 |:---:|:---:|:---:|
 | <img src="./assets/screenshot_list.png" width="200"> | <img src="./assets/screenshot_game.png" width="200"> | <img src="./assets/screenshot_editor.png" width="200"> |
+
+---
+
+## 🎓 Key Learnings
+
+- 🧱 **SwiftUI Fundamentals**
+- 🔁 **State Management**
+- 📐 **Layout System**
+- 🎨 **Animation & Transitions**
+- ⏱️ **Swift Protocols**
+- 📋 **Navigation**
+- 📱 **Adaptive Layouts**
+- ✏️ **Forms**
+- 💾 **SwiftData**
+- 🧵 **Concurrency**
+- 🎯 **Custom Shapes & Gestures**
+- 🔧 **Alternative Persistence Data**
