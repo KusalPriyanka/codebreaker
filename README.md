@@ -35,3 +35,24 @@ CodeBreaker is an iOS app I built from scratch as part of my learning journey th
 - 🧵 **Concurrency**
 - 🎯 **Custom Shapes & Gestures**
 - 🔧 **Alternative Persistence Data**
+
+---
+
+## 🚀 How to Run
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/KusalPriyanka/codebreaker.git
+   cd codebreaker
+   ```
+
+2. Open in Xcode
+   ```bash
+   open codebreaker.xcodeproj
+   ```
+
+3. Select a simulator or device in the Xcode toolbar
+
+4. Press `⌘ + R` to build and run
+
+**Requirements:** Xcode 26+, iOS 26.0+ simulator or device
